@@ -7,11 +7,14 @@ RUN set -x; \
         && apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
+            vim \
+            git \
             node-less \
             node-clean-css \
             python-pyinotify \
             python-renderpm \
             python-support \
+            python-pip \
         && curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
         && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - \
         && dpkg --force-depends -i wkhtmltox.deb \
@@ -21,11 +24,12 @@ RUN set -x; \
 
 # Install Odoo
 ENV ODOO_VERSION 8.0
-ENV ODOO_RELEASE 20160428
+ENV ODOO_RELEASE 20160520
 RUN set -x; \
         curl -o odoo.deb -SL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
         && echo 'f5109ed62235380304e8b953c60f5c0fa9c5c5cd odoo.deb' | sha1sum -c - \
         && dpkg --force-depends -i odoo.deb \
+        && pip install odoorpc \
         && apt-get update \
         && apt-get -y install -f --no-install-recommends \
         && rm -rf /var/lib/apt/lists/* odoo.deb
